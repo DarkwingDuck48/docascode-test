@@ -12,18 +12,12 @@ jobs:
         id: files_list
         run: |
           # this will also include README.md
+          mkdir result
           echo "::set-output name=files::$(printf '"%s" ' *.md)"
       - uses: docker://pandoc/latex:2.9
         with:
-          args: --output=output/result.docx ${{ steps.files_list.outputs.files }}
+          args: --output=result/result.docx ${{ steps.files_list.outputs.files }}
       - uses: actions/upload-artifact@master
         with:
-          name: output
-          path: output
-      - name: Download a Build Artifact
-        uses: actions/download-artifact@v3.0.2
-        with:
-          # Artifact name
-          name: output
-          # Destination path
-          path: output
+          name: assets-for-download
+          path: result
